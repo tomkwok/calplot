@@ -155,8 +155,9 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
 
     # Add missing days.
     by_day = by_day.reindex(
-        pd.date_range(start=str(year), end=str(year + 1), freq='D')[:-1])
-    
+        pd.date_range(start=str(year), end=str(year + 1),
+                      freq='D', tz=by_day.index.tzinfo)[:-1])
+
     # Create data frame we can pivot later.
     by_day = pd.DataFrame({'data': by_day,
                            'fill': 1,
