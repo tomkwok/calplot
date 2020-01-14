@@ -1,8 +1,7 @@
 """
 Calendar heatmaps from Pandas time series data.
 
-Plot Pandas time series data sampled by day in a heatmap per calendar year,
-similar to GitHub's contributions calendar.
+Plot Pandas time series data sampled by day in a heatmap per calendar year.
 """
 
 
@@ -17,22 +16,18 @@ import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
 
-__version_info__ = ('0', '0', '7', 'dev')
-__date__ = '14 Feb 2016'
-
+__version_info__ = ('0', '1', '1')
+__date__ = '14 Jan 2020'
 
 __version__ = '.'.join(__version_info__)
-__author__ = 'Martijn Vermaat'
-__contact__ = 'martijn@vermaat.name'
-__homepage__ = 'https://github.com/martijnvermaat/calmap'
+__author__ = 'Tom Kwok'
+__contact__ = 'tom@tomkwok.com'
+__homepage__ = 'https://github.com/tomkwok/calplot'
 
-_pandas_18 = StrictVersion(pd.__version__) >= StrictVersion('0.18')
-
-
-def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
+def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
              fillcolor='whitesmoke', linewidth=1, linecolor=None,
-             daylabels=calendar.day_abbr[:], dayticks=True,
-             monthlabels=calendar.month_abbr[1:], monthticks=True, ax=None,
+             daylabels=calendar.day_abbr[:], dayticks=True, dropzero=True,
+             monthlabels=calendar.month_abbr[1:], monthlabelha='center', monthticks=True, ax=None,
              **kwargs):
     """
     Plot one year from a timeseries as a calendar heatmap.
@@ -65,8 +60,12 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
     dayticks : list or int or bool
         If `True`, label all days. If `False`, don't label days. If a list,
         only label days with these indices. If an integer, label every n day.
+    dropzero : bool
+        If `True`, don't fill a color for days with a zero value.
     monthlabels : list
         Strings to use as labels for months, must be of length 12.
+    monthlabelha : string
+        Horizontal alignment for labels for months.
     monthticks : list or int or bool
         If `True`, label all months. If `False`, don't label months. If a
         list, only label months with these indices. If an integer, label every
@@ -90,14 +89,14 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
     .. plot::
         :context: close-figs
 
-        calmap.yearplot(events)
+        calplot.yearplot(events)
 
     We can choose which year is plotted with the `year` keyword argment:
 
     .. plot::
         :context: close-figs
 
-        calmap.yearplot(events, year=2015)
+        calplot.yearplot(events, year=2019)
 
     The appearance can be changed by using another colormap. Here we also use
     a darker fill color for days without data and remove the lines:
@@ -105,7 +104,7 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
     .. plot::
         :context: close-figs
 
-        calmap.yearplot(events, cmap='YlGn', fillcolor='grey',
+        calplot.yearplot(events, cmap='YlGn', fillcolor='grey',
                         linewidth=0)
 
     The axis tick labels can look a bit crowded. We can ask to draw only every
@@ -115,7 +114,7 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
     .. plot::
         :context: close-figs
 
-        calmap.yearplot(events, monthticks=3, daylabels='MTWTFSS',
+        calplot.yearplot(events, monthticks=3, daylabels='MTWTFSS',
                         dayticks=[0, 2, 4, 6])
 
     """
@@ -127,10 +126,9 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
         by_day = data
     else:
         # Sample by day.
-        if _pandas_18:
-            by_day = data.resample('D').agg(how)
-        else:
-            by_day = data.resample('D', how=how)
+        by_day = data.resample('D').agg(how)
+        if dropzero:
+            by_day = by_day.replace({0: np.nan}).dropna()
 
     # Min and max per day.
     if vmin is None:
@@ -148,7 +146,7 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
         # of course won't work when the axes itself has a transparent
         # background so in that case we default to white which will usually be
         # the figure or canvas background color.
-        linecolor = ax.get_axis_bgcolor()
+        linecolor = ax.get_facecolor()
         if ColorConverter().to_rgba(linecolor)[-1] == 0:
             linecolor = 'white'
 
@@ -217,9 +215,9 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
         dayticks = range(len(daylabels))[dayticks // 2::dayticks]
 
     ax.set_xlabel('')
-    ax.set_xticks([by_day.ix[datetime.date(year, i + 1, 15)].week
+    ax.set_xticks([by_day.loc[datetime.date(year, i + 1, 15)].week
                    for i in monthticks])
-    ax.set_xticklabels([monthlabels[i] for i in monthticks], ha='center')
+    ax.set_xticklabels([monthlabels[i] for i in monthticks], ha=monthlabelha)
 
     ax.set_ylabel('')
     ax.yaxis.set_ticks_position('right')
@@ -230,8 +228,8 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
     return ax
 
 
-def calendarplot(data, how='sum', yearlabels=True, yearascending=True, yearlabel_kws=None,
-                 subplot_kws=None, gridspec_kws=None, fig_kws=None, **kwargs):
+def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lightgray', yearlabel_kws=None, dropzero=True, 
+                 subplot_kws=None, gridspec_kws=None, dpi=72, figsize=None, fig_kws=None, colorbar=True, suptitle=None, **kwargs):
     """
     Plot a timeseries as a calendar heatmap.
 
@@ -243,10 +241,16 @@ def calendarplot(data, how='sum', yearlabels=True, yearascending=True, yearlabel
         Method for resampling data by day. If `None`, assume data is already
         sampled by day and don't resample. Otherwise, this is passed to Pandas
         `Series.resample`.
+    figsize : (float, float)
+        Size of figure for the plot.
+    suptitle : string
+        Title for the plot.
     yearlabels : bool
        Whether or not to draw the year for each subplot.
     yearascending : bool
        Sort the calendar in ascending or descending order.
+    yearcolor : bool
+       Color of text of label for years.
     yearlabel_kws : dict
        Keyword arguments passed to the matplotlib `set_ylabel` call which is
        used to draw the year for each subplot.
@@ -270,12 +274,12 @@ def calendarplot(data, how='sum', yearlabels=True, yearascending=True, yearlabel
     Examples
     --------
 
-    With `calendarplot` we can plot several years in one figure:
+    With `calplot` we can plot several years in one figure:
 
     .. plot::
         :context: close-figs
 
-        calmap.calendarplot(events)
+        calplot.calplot(events)
 
     """
     yearlabel_kws = yearlabel_kws or {}
@@ -287,7 +291,13 @@ def calendarplot(data, how='sum', yearlabels=True, yearascending=True, yearlabel
     if not yearascending:
         years = years[::-1]
 
-    fig, axes = plt.subplots(nrows=len(years), ncols=1, squeeze=False,
+    if colorbar and data.nunique() <= 1:
+        colorbar = False
+    
+    if figsize is None:
+        figsize = (10+(colorbar*2), 1.7*len(years))
+    
+    fig, axes = plt.subplots(nrows=len(years), ncols=1, squeeze=False, figsize=figsize, dpi=dpi, 
                              subplot_kw=subplot_kws,
                              gridspec_kw=gridspec_kws, **fig_kws)
     axes = axes.T[0]
@@ -296,14 +306,14 @@ def calendarplot(data, how='sum', yearlabels=True, yearascending=True, yearlabel
     if how is None:
         by_day = data
     else:
-        if _pandas_18:
-            by_day = data.resample('D').agg(how)
-        else:
-            by_day = data.resample('D', how=how)
+        by_day = data.resample('D').agg(how)
+        if dropzero:
+            by_day = by_day.replace({0: np.nan}).dropna()
 
+    
     ylabel_kws = dict(
-        fontsize=32,
-        color=kwargs.get('fillcolor', 'whitesmoke'),
+        fontsize=30,
+        color=yearcolor,
         fontweight='bold',
         fontname='Arial',
         ha='center')
@@ -325,5 +335,13 @@ def calendarplot(data, how='sum', yearlabels=True, yearascending=True, yearlabel
 
     # Make the axes look good.
     plt.tight_layout()
+    
+    # Source: https://github.com/martijnvermaat/calmap/issues/9
+    if colorbar:
+        fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist())
 
+    if suptitle:
+        plt.suptitle(suptitle)
+    
     return fig, axes
+

@@ -133,8 +133,8 @@ The plot directive has the following configuration options:
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from matplotlib.externals import six
-from matplotlib.externals.six.moves import xrange
+import six
+from six.moves import xrange
 
 import sys, os, shutil, io, re, textwrap
 from os.path import relpath
@@ -177,6 +177,8 @@ except UserWarning:
 else:
     import matplotlib.pyplot as plt
 from matplotlib import _pylab_helpers
+
+matplotlib.rcParams['figure.dpi'] = 72
 
 __version__ = 2
 
@@ -545,7 +547,7 @@ def render_figures(code, code_path, output_dir, output_base, context,
     *output_base*
     """
     # -- Parse format list
-    default_dpi = {'png': 80, 'hires.png': 200, 'pdf': 200}
+    default_dpi = {'png': 72, 'hires.png': 72, 'pdf': 72, 'html': 72}
     formats = []
     plot_formats = config.plot_formats
     if isinstance(plot_formats, six.string_types):

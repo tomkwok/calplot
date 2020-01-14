@@ -3,3 +3,5 @@ build
 dist
 .cache
 *.egg-info
+**/.ipynb_checkpoints/*
+*.ipynb

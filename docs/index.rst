@@ -1,4 +1,4 @@
-.. currentmodule:: calmap
+.. currentmodule:: calplot
 
 
 Calendar heatmaps from Pandas time series data
@@ -8,47 +8,35 @@ Plot `Pandas <http://pandas.pydata.org/>`_ time series data sampled by day in
 a heatmap per calendar year, similar to GitHub's contributions plot, using
 `matplotlib <http://matplotlib.org/>`_.
 
+Package `calplot <https://pypi.org/project/calplot/>`_ is a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ with the addition of arguments :code:`colorbar`, :code:`dropzero`, :code:`figsize`, :code:`suptitle` and :code:`yearcolor` for easier customization of plots.
 
 Usage
 -----
 
 Assume we have some weighted events as a Pandas Series with a
-DatetimeIndex. They could be Git commits (with the diff size as weight),
-mileage of your runs, or minutes spent on telemarketing phone calls driving
-you crazy.
+DatetimeIndex.
 
 For illustration purposes we just create 500 events as random float values
-assigned to random days over a 700-day period:
+assigned to random days over a 730-day period:
 
 .. plot::
     :context: close-figs
 
-    import numpy as np; np.random.seed(sum(map(ord, 'calmap')))
+    import numpy as np; np.random.seed(sum(map(ord, 'calplot')))
     import pandas as pd
-    import calmap
+    import calplot
 
-    all_days = pd.date_range('1/15/2014', periods=700, freq='D')
+    all_days = pd.date_range('1/1/2019', periods=730, freq='D')
     days = np.random.choice(all_days, 500)
     events = pd.Series(np.random.randn(len(days)), index=days)
 
-Using :func:`yearplot`, we can easily plot a heatmap of these events over a
-year:
-
-.. plot::
-    :context: close-figs
-
-    calmap.yearplot(events, year=2015)
-
-Or we can use :func:`calendarplot` to plot all years as subplots into one
+We can use :func:`calplot` to plot all years as subplots into one
 figure:
 
 .. plot::
     :context: close-figs
 
-    calmap.calendarplot(events, monthticks=3, daylabels='MTWTFSS',
-                        dayticks=[0, 2, 4, 6], cmap='YlGn',
-                        fillcolor='grey', linewidth=0,
-                        fig_kws=dict(figsize=(8, 4)))
+    calplot.calplot(events, cmap='YlGn')
 
 See the :ref:`API documentation <api>` for more information and examples.
 
@@ -58,10 +46,10 @@ Installation
 
 To install the latest release via PyPI using pip::
 
-    pip install calmap
+    pip install calplot
 
 The latest development version `can be found on GitHub
-<https://github.com/martijnvermaat/calmap>`_.
+<https://github.com/tomkwok/calplot>`_.
 
 
 .. _api:
@@ -69,10 +57,8 @@ The latest development version `can be found on GitHub
 API documentation
 -----------------
 
-.. module:: calmap
-
-.. autofunction:: yearplot
-.. autofunction:: calendarplot
+.. module:: calplot
+.. autofunction:: calplot
 
 
 Copyright
