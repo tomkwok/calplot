@@ -20,12 +20,12 @@ Package `calplot <https://pypi.org/project/calplot/>`_ is a fork of `calmap <htt
 - Argument :code:`figsize` added for function :code:`calplot`. Defaults to a tighter layout automatically adjusted to fit the number of years in plot.
 - Argument :code:`suptitle` added for function :code:`calplot`. Defaults to :code:`None`.
 - Argument :code:`yearcolor` added for function :code:`calplot`. Defaults to :code:`lightgray` (in contrast to :code:`whitesmoke`, the default value for :code:`fillcolor`).
-- Default colormap :code:`cmap` for :code:`yearplot` (and hence :code:`calplot`) changed to :code:`viridis`.
+- Default colormap :code:`cmap` for function :code:`calplot` changed to :code:`viridis`.
 
 Usage
 -----
 
-See the `documentation <https://pythonhosted.org/calplot>`_.
+See the `documentation <https://calplot.readthedocs.io/en/latest/>`_.
 
 
 Installation
@@ -41,5 +41,3 @@ Todo
 - Option to add a seperating line between months.
 - Option to plot a rounded value for the day or plot the day of month for each mesh grid cell.
 - Option to change horizontal alignment (for example, to the left) for month labels.
-- Fix :code:`figsize` for :code:`yearplot`.
-- Fix colorbar misalignment for plots with different :code:`dpi` values.

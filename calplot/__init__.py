@@ -16,8 +16,8 @@ import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
 
-__version_info__ = ('0', '1', '1')
-__date__ = '14 Jan 2020'
+__version_info__ = ('0', '1', '2')
+__date__ = '15 Jan 2020'
 
 __version__ = '.'.join(__version_info__)
 __author__ = 'Tom Kwok'
@@ -229,7 +229,7 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
 
 
 def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lightgray', yearlabel_kws=None, dropzero=True, 
-                 subplot_kws=None, gridspec_kws=None, dpi=72, figsize=None, fig_kws=None, colorbar=True, suptitle=None, **kwargs):
+                 subplot_kws=None, gridspec_kws=None, figsize=None, fig_kws=None, colorbar=True, suptitle=None, **kwargs):
     """
     Plot a timeseries as a calendar heatmap.
 
@@ -254,6 +254,8 @@ def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lig
     yearlabel_kws : dict
        Keyword arguments passed to the matplotlib `set_ylabel` call which is
        used to draw the year for each subplot.
+    dropzero : bool
+        If `True`, don't fill a color for days with a zero value.
     subplot_kws : dict
         Keyword arguments passed to the matplotlib `add_subplot` call used to
         create each subplot.
@@ -295,9 +297,9 @@ def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lig
         colorbar = False
     
     if figsize is None:
-        figsize = (10+(colorbar*2), 1.7*len(years))
+        figsize = (10+(colorbar*2.5), 1.7*len(years))
     
-    fig, axes = plt.subplots(nrows=len(years), ncols=1, squeeze=False, figsize=figsize, dpi=dpi, 
+    fig, axes = plt.subplots(nrows=len(years), ncols=1, squeeze=False, figsize=figsize, 
                              subplot_kw=subplot_kws,
                              gridspec_kw=gridspec_kws, **fig_kws)
     axes = axes.T[0]
@@ -336,9 +338,10 @@ def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lig
     # Make the axes look good.
     plt.tight_layout()
     
-    # Source: https://github.com/martijnvermaat/calmap/issues/9
     if colorbar:
-        fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist())
+        fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist(), orientation='vertical')
+        #fig.subplots_adjust(right=0.8)
+        #fig.colorbar(axes[0].get_children()[1], cax=fig.add_axes([0.85, 0.05, 0.02, 0.9]), orientation='vertical')
 
     if suptitle:
         plt.suptitle(suptitle)
