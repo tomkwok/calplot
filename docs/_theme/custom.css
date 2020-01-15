@@ -1,0 +1,8 @@
+.ethical-rtd,
+.ethical-alabaster,
+.keep-us-sustainable,
+div.ethical-sidebar,
+div.ethical-footer {
+    display: none !important;
+    visibility: hidden !important;
+}

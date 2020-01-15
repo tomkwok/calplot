@@ -275,7 +275,7 @@ def setup(app):
     app.add_config_value('plot_formats', ['png', 'hires.png', 'pdf'], True)
     app.add_config_value('plot_basedir', None, True)
     app.add_config_value('plot_html_show_formats', True, True)
-    app.add_config_value('plot_rcparams', {}, True)
+    app.add_config_value('plot_rcparams', {'figure.dpi': 72, 'savefig.dpi': 72}, True)
     app.add_config_value('plot_apply_rcparams', False, True)
     app.add_config_value('plot_working_directory', None, True)
     app.add_config_value('plot_template', None, True)
@@ -561,7 +561,7 @@ def render_figures(code, code_path, output_dir, output_base, context,
                 suffix,dpi = fmt.split(':')
                 formats.append((str(suffix), int(dpi)))
             else:
-                formats.append((fmt, default_dpi.get(fmt, 80)))
+                formats.append((fmt, default_dpi.get(fmt, 72)))
         elif type(fmt) in (tuple, list) and len(fmt)==2:
             formats.append((str(fmt[0]), int(fmt[1])))
         else:
@@ -647,9 +647,8 @@ def render_figures(code, code_path, output_dir, output_base, context,
             images.append(img)
             for format, dpi in formats:
                 try:
-                    figman.canvas.figure.tight_layout()
+                    #figman.canvas.figure.tight_layout()
                     figman.canvas.figure.savefig(img.filename(format),
-                                                 dpi=dpi,
                                                  bbox_inches='tight')
                 except Exception as err:
                     raise PlotError(traceback.format_exc())
