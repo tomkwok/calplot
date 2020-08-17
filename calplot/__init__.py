@@ -16,8 +16,8 @@ import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
 
-__version_info__ = ('0', '1', '2')
-__date__ = '15 Jan 2020'
+__version_info__ = ('0', '1', '3')
+__date__ = '17 Aug 2020'
 
 __version__ = '.'.join(__version_info__)
 __author__ = 'Tom Kwok'
@@ -156,19 +156,19 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     # Add missing days.
     by_day = by_day.reindex(
         pd.date_range(start=str(year), end=str(year + 1), freq='D')[:-1])
-
+    
     # Create data frame we can pivot later.
     by_day = pd.DataFrame({'data': by_day,
                            'fill': 1,
                            'day': by_day.index.dayofweek,
-                           'week': by_day.index.week})
+                           'week': by_day.index.isocalendar().week})
 
     # There may be some days assigned to previous year's last week or
     # next year's first week. We create new week numbers for them so
     # the ordering stays intact and week/day pairs unique.
-    by_day.loc[(by_day.index.month == 1) & (by_day.week > 50), 'week'] = 0
-    by_day.loc[(by_day.index.month == 12) & (by_day.week < 10), 'week'] \
-        = by_day.week.max() + 1
+    by_day.loc[(by_day.index.month == 1) & (by_day.isocalendar().week > 50), 'week'] = 0
+    by_day.loc[(by_day.index.month == 12) & (by_day.isocalendar().week < 10), 'week'] \
+        = by_day.isocalendar().week.max() + 1
 
     # Pivot data on day and week and mask NaN days.
     plot_data = by_day.pivot('day', 'week', 'data').values[::-1]
@@ -215,7 +215,7 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
         dayticks = range(len(daylabels))[dayticks // 2::dayticks]
 
     ax.set_xlabel('')
-    ax.set_xticks([by_day.loc[datetime.date(year, i + 1, 15)].week
+    ax.set_xticks([by_day.loc[datetime.date(year, i + 1, 15)].isocalendar().week
                    for i in monthticks])
     ax.set_xticklabels([monthlabels[i] for i in monthticks], ha=monthlabelha)
 
