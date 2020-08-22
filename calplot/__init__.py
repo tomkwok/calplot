@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
 
-__version_info__ = ('0', '1', '3')
+__version_info__ = ('0', '1', '4')
 __date__ = '17 Aug 2020'
 
 __version__ = '.'.join(__version_info__)
@@ -166,9 +166,9 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     # There may be some days assigned to previous year's last week or
     # next year's first week. We create new week numbers for them so
     # the ordering stays intact and week/day pairs unique.
-    by_day.loc[(by_day.index.month == 1) & (by_day.isocalendar().week > 50), 'week'] = 0
-    by_day.loc[(by_day.index.month == 12) & (by_day.isocalendar().week < 10), 'week'] \
-        = by_day.isocalendar().week.max() + 1
+    by_day.loc[(by_day.index.month == 1) & (by_day.week > 50), 'week'] = 0
+    by_day.loc[(by_day.index.month == 12) & (by_day.week < 10), 'week'] \
+        = by_day.week.max() + 1
 
     # Pivot data on day and week and mask NaN days.
     plot_data = by_day.pivot('day', 'week', 'data').values[::-1]
@@ -215,7 +215,7 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
         dayticks = range(len(daylabels))[dayticks // 2::dayticks]
 
     ax.set_xlabel('')
-    ax.set_xticks([by_day.loc[datetime.date(year, i + 1, 15)].isocalendar().week
+    ax.set_xticks([by_day.loc[pd.Timestamp(datetime.date(year, i + 1, 15))].week
                    for i in monthticks])
     ax.set_xticklabels([monthlabels[i] for i in monthticks], ha=monthlabelha)
 
@@ -339,9 +339,11 @@ def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lig
     plt.tight_layout()
     
     if colorbar:
-        fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist(), orientation='vertical')
-        #fig.subplots_adjust(right=0.8)
-        #fig.colorbar(axes[0].get_children()[1], cax=fig.add_axes([0.85, 0.05, 0.02, 0.9]), orientation='vertical')
+        if len(years) == 1:
+            fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist(), orientation='vertical')
+        else:
+            fig.subplots_adjust(right=0.8)
+            fig.colorbar(axes[0].get_children()[1], cax=fig.add_axes([0.85, 0.025, 0.02, 0.95]), orientation='vertical')
 
     if suptitle:
         plt.suptitle(suptitle)
