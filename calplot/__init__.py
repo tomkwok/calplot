@@ -161,7 +161,7 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     by_day = pd.DataFrame({'data': by_day,
                            'fill': 1,
                            'day': by_day.index.dayofweek,
-                           'week': by_day.index.isocalendar().week})
+                           'week': by_day.index.week})
 
     # There may be some days assigned to previous year's last week or
     # next year's first week. We create new week numbers for them so
