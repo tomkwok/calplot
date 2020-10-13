@@ -13,7 +13,7 @@ a heatmap per calendar year, similar to GitHub's contributions plot, using
 
 Package `calplot <https://pypi.org/project/calplot/>`_ is a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ with the following changes and additions.
 
-- :code:`pandas>=0.18` is now required to install the package. Legacy code for compatibility removed. Fixed a FutureWarning in :code:`yearplot`.
+- :code:`pandas>=1.1` is now required to install the package. Legacy code for compatibility removed. Fixed a FutureWarning in :code:`yearplot`.
 - Function :code:`calendarplot` renamed to :code:`calplot`.
 - Argument :code:`colorbar` added for function :code:`calplot` to display a colorbar to the right of the heatmap if more than one unique values in plot. Defaults to :code:`True`.
 - Argument :code:`dropzero` added for function :code:`calplot` and :code:`yearplot` to specify whether to not fill a cell with a color for days with a zero value. Defaults to :code:`True`.
