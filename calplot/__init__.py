@@ -12,12 +12,14 @@ import datetime
 
 from matplotlib.colors import ColorConverter, ListedColormap
 import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
+from dateutil.relativedelta import relativedelta
 import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
 
-__version_info__ = ('0', '1', '4')
-__date__ = '17 Aug 2020'
+__version_info__ = ('0', '1', '5')
+__date__ = '23 Dec 2020'
 
 __version__ = '.'.join(__version_info__)
 __author__ = 'Tom Kwok'
@@ -27,8 +29,8 @@ __homepage__ = 'https://github.com/tomkwok/calplot'
 def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
              fillcolor='whitesmoke', linewidth=1, linecolor=None,
              daylabels=calendar.day_abbr[:], dayticks=True, dropzero=True,
-             monthlabels=calendar.month_abbr[1:], monthlabelha='center', monthticks=True, ax=None,
-             **kwargs):
+             monthlabels=calendar.month_abbr[1:], monthlabelha='center', monthticks=True, edgecolor='gray',
+             ax=None, **kwargs):
     """
     Plot one year from a timeseries as a calendar heatmap.
 
@@ -70,6 +72,8 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
         If `True`, label all months. If `False`, don't label months. If a
         list, only label months with these indices. If an integer, label every
         n month.
+    edgecolor : color
+        Color of the lines that will divide months.
     ax : matplotlib Axes
         Axes in which to draw the plot, otherwise use the currently-active
         Axes.
@@ -224,6 +228,29 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     ax.set_yticks([6 - i + 0.5 for i in dayticks])
     ax.set_yticklabels([daylabels[i] for i in dayticks], rotation='horizontal',
                        va='center')
+
+    # month borders reference https://github.com/rougier/calendar-heatmap
+    xticks, labels = [], []
+    start = datetime.datetime(year,1,1).weekday()
+    for month in range(1,13):
+        first = datetime.datetime(year, month, 1)
+        last = first + relativedelta(months=1, days=-1)
+        y0 = 7-first.weekday()
+        y1 = 7-last.weekday()
+        x0 = (int(first.strftime('%j'))+start-1)//7
+        x1 = (int(last.strftime('%j'))+start-1)//7
+        P = [(x0, y0),
+             (x0+1, y0),
+             (x0+1, 7),
+             (x1+1, 7),
+             (x1+1, y1-1),
+             (x1, y1-1),
+             (x1, 0),
+             (x0, 0) ]
+        xticks.append(x0 +(x1-x0+1)/2)
+        poly = Polygon(P, edgecolor=edgecolor, facecolor='None',
+                       linewidth=linewidth, zorder=20, clip_on=False)
+        ax.add_artist(poly)
 
     return ax
 
