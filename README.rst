@@ -22,6 +22,11 @@ With arguments :code:`yearcolor=black`, :code:`cmap='YlGn'`:
 .. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_yearcolor_black.png
     :alt: Example calendar heatmap with yearcolor set to black
 
+With arguments :code:`textformat='{:.0f}'`, :code:`textfiller='-'`, :code:`cmap='YlGn'`:
+
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_textformat.png
+    :alt: Example calendar heatmap with textformat and textfiller set
+
 With arguments :code:`dropzero=False`, :code:`cmap='YlGn'`:
 
 .. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_dropzero_False.png
@@ -31,7 +36,6 @@ With arguments :code:`linewidth=0`, :code:`cmap='YlGn'`:
 
 .. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_linewidth_zero.png
     :alt: Example calendar heatmap with linewidth set to 0
-
 
 Usage
 -----
@@ -63,9 +67,15 @@ Changelog
 
 Package `calplot <https://pypi.org/project/calplot/>`_ is a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ 0.0.7-dev with the following changes and additions.
 
+Since version 0.1.6 (Dec 2020):
+
+- Added argument :code:`textformat` for function :code:`calplot` and :code:`yearplot` to specify the text format string for grid cell text. Defaults to empty string. Note that text plotting is turned off by setting the argument to empty string.
+- Added argument :code:`textfiller` for function :code:`calplot` and :code:`yearplot` to specify the fallback text for grid cell text. Defaults to empty string.
+- Added argument :code:`textcolor` for function :code:`calplot` and :code:`yearplot` to specify the text color for grid cell text. Defaults to :code:`black`.
+
 Since version 0.1.5 (Dec 2020):
 
-- Added argument :code:`edgecolor` for function :code:`calplot` and :code:`yearplot` to specify color of seperation lines between months. Defaults to :code:`gray`. Note that lines can be turned off by setting argument to :code:`None` without quotes.
+- Added argument :code:`edgecolor` for function :code:`calplot` and :code:`yearplot` to specify color of seperation lines between months. Defaults to :code:`gray`. Note that lines can be turned off by setting the argument to :code:`None` without quotes.
 
 Since version 0.1.3 (Aug 2020):
 
@@ -84,8 +94,3 @@ Since version 0.1.1 (Jan 2020):
 - Added argument :code:`yearcolor` for function :code:`calplot`. Defaults to :code:`lightgray`. Note that the default color is in contrast to :code:`whitesmoke`, which is the default value for :code:`fillcolor`.
 - Added argument :code:`monthlabelha` for function :code:`calplot` and :code:`yearplot` to specify horizontal alignment for month labels. Defaults to :code:`center`.
 - Changed default colormap :code:`cmap` for function :code:`calplot` to :code:`viridis`.
-
-Todo
-----
-
-- Option to plot a rounded value for the day, or to plot the day of month for each mesh grid cell.
