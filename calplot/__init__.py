@@ -18,8 +18,8 @@ import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
 
-__version_info__ = ('0', '1', '5')
-__date__ = '23 Dec 2020'
+__version_info__ = ('0', '1', '6', '1')
+__date__ = '24 Dec 2020'
 
 __version__ = '.'.join(__version_info__)
 __author__ = 'Tom Kwok'
@@ -29,6 +29,7 @@ __homepage__ = 'https://github.com/tomkwok/calplot'
 def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
              fillcolor='whitesmoke', linewidth=1, linecolor=None,
              daylabels=calendar.day_abbr[:], dayticks=True, dropzero=True,
+             textformat='', textfiller='', textcolor='black',
              monthlabels=calendar.month_abbr[1:], monthlabelha='center', monthticks=True, edgecolor='gray',
              ax=None, **kwargs):
     """
@@ -74,6 +75,12 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
         n month.
     edgecolor : color
         Color of the lines that will divide months.
+    textformat : string
+        Text format string for grid cell text
+    textfiller : string
+        Fallback text for grid cell text for cells with no data
+    textcolor : color
+        Color of the grid cell text
     ax : matplotlib Axes
         Axes in which to draw the plot, otherwise use the currently-active
         Axes.
@@ -228,6 +235,19 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     ax.set_yticks([6 - i + 0.5 for i in dayticks])
     ax.set_yticklabels([daylabels[i] for i in dayticks], rotation='horizontal',
                        va='center')
+
+    if textformat != '':
+        for y in range(plot_data.shape[0]):
+            for x in range(plot_data.shape[1]):
+                content = ''
+                masked = plot_data[y, x]
+                if masked is np.ma.masked:
+                    if fill_data[y, x] == 1:
+                        content = textfiller
+                else:
+                    content = textformat.format(masked)
+                ax.text(x + 0.5, y + 0.5, content, color=textcolor,
+                         horizontalalignment='center', verticalalignment='center')
 
     # month borders reference https://github.com/rougier/calendar-heatmap
     xticks, labels = [], []
