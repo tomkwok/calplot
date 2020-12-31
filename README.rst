@@ -7,42 +7,17 @@ Plot `Pandas <http://pandas.pydata.org/>`_ time series data sampled by day in
 a heatmap per calendar year, similar to GitHub's contributions plot, using
 `matplotlib <http://matplotlib.org/>`_.
 
-With default configuration:
+Installation
+------------
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_edgecolor_default.png
-    :alt: Example calendar heatmap with default configuration
+To install the latest release via PyPI using pip::
 
-With arguments :code:`edgecolor=None`, :code:`cmap='YlGn'`:
-
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_edgecolor_None.png
-    :alt: Example calendar heatmap with edgecolor set to None
-
-With arguments :code:`yearcolor=black`, :code:`cmap='YlGn'`:
-
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_yearcolor_black.png
-    :alt: Example calendar heatmap with yearcolor set to black
-
-With arguments :code:`textformat='{:.0f}'`, :code:`textfiller='-'`, :code:`cmap='YlGn'`:
-
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_textformat.png
-    :alt: Example calendar heatmap with textformat and textfiller set
-
-With arguments :code:`dropzero=False`, :code:`cmap='YlGn'`:
-
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_dropzero_False.png
-    :alt: Example calendar heatmap with dropzero set to False
-
-With arguments :code:`linewidth=0`, :code:`cmap='YlGn'`:
-
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_linewidth_zero.png
-    :alt: Example calendar heatmap with linewidth set to 0
+    pip install calplot
 
 Usage
 -----
 
 See the `documentation <https://calplot.readthedocs.io/en/latest/>`_.
-
-Code to generate the first example:
 
 .. code-block:: python
 
@@ -54,18 +29,63 @@ Code to generate the first example:
     events = pd.Series(np.random.randn(len(days)), index=days)
     calplot.calplot(events)
 
-Installation
-------------
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_edgecolor_default.png
+    :alt: Example calendar heatmap with default configuration
 
-To install the latest release via PyPI using pip::
+.. code-block:: python
 
-    pip install calplot
+    all_days = pd.date_range('1/1/2019', periods=360, freq='D')
+    days = np.random.choice(all_days, 500)
+    events = pd.Series(np.random.randn(len(days)), index=days)
+    calplot.calplot(events, edgecolor=None, cmap='YlGn')
+
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_edgecolor_None.png
+    :alt: Example calendar heatmap with edgecolor set to None
+
+.. code-block:: python
+
+    calplot.calplot(events, yearcolor=black, cmap='YlGn')
+
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_yearcolor_black.png
+    :alt: Example calendar heatmap with yearcolor set to black
+
+.. code-block:: python
+
+    calplot.calplot(events, textformat='{:.0f}', textfiller='-', cmap='YlGn')
+
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_textformat.png
+    :alt: Example calendar heatmap with textformat and textfiller set
+
+.. code-block:: python
+
+    calplot.calplot(events, dropzero=False, cmap='YlGn')
+
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_dropzero_False.png
+    :alt: Example calendar heatmap with dropzero set to False
+
+.. code-block:: python
+
+    calplot.calplot(events, colorbar=False, suptitle='Random data from standard normal distribution', cmap='YlGn')
+
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_colorbar_False_suptitle.png
+    :alt: Example calendar heatmap with colorbar set to False and suptitle set
+
+.. code-block:: python
+
+    calplot.calplot(events, linewidth=0, cmap='YlGn')
+
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_linewidth_zero.png
+    :alt: Example calendar heatmap with linewidth set to 0
 
 
 Changelog
 ---------
 
 Package `calplot <https://pypi.org/project/calplot/>`_ is a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ 0.0.7-dev with the following changes and additions.
+
+Todo
+
+- Adding argument :code:`startday` for function :code:`calplot` and :code:`yearplot` to specify the index representing the `day of week <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DatetimeIndex.dayofweek.html>`_ of the first day in each week in the generated plot. Defaults to `0`, which represents Monday. (Implementation of this require non-trivial change to existing code that is inherited from calmap or taken from other projects, including code for pivoting of by_days DataFrame, and for calculation of polygon coordinates for month borders, in addition to new code to handle the ordering of items in :code:`daylabels` list.)
 
 Since version 0.1.6 (Dec 2020):
 
