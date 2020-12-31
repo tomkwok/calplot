@@ -4,9 +4,6 @@ Calendar heatmaps from Pandas time series data.
 Plot Pandas time series data sampled by day in a heatmap per calendar year.
 """
 
-
-from __future__ import unicode_literals
-
 import calendar
 import datetime
 
