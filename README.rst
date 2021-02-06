@@ -29,7 +29,7 @@ See the `documentation <https://calplot.readthedocs.io/en/latest/>`_.
     events = pd.Series(np.random.randn(len(days)), index=days)
     calplot.calplot(events)
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_edgecolor_default.png
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_edgecolor_default.svg
     :alt: Example calendar heatmap with default configuration
 
 .. code-block:: python
@@ -39,42 +39,42 @@ See the `documentation <https://calplot.readthedocs.io/en/latest/>`_.
     events = pd.Series(np.random.randn(len(days)), index=days)
     calplot.calplot(events, edgecolor=None, cmap='YlGn')
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_edgecolor_None.png
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_edgecolor_None.svg
     :alt: Example calendar heatmap with edgecolor set to None
 
 .. code-block:: python
 
     calplot.calplot(events, yearcolor=black, cmap='YlGn')
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_yearcolor_black.png
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_yearcolor_black.svg
     :alt: Example calendar heatmap with yearcolor set to black
 
 .. code-block:: python
 
     calplot.calplot(events, textformat='{:.0f}', textfiller='-', cmap='YlGn')
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_textformat.png
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_textformat.svg
     :alt: Example calendar heatmap with textformat and textfiller set
 
 .. code-block:: python
 
     calplot.calplot(events, dropzero=False, cmap='YlGn')
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_dropzero_False.png
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_dropzero_False.svg
     :alt: Example calendar heatmap with dropzero set to False
 
 .. code-block:: python
 
     calplot.calplot(events, colorbar=False, suptitle='Random data from standard normal distribution', cmap='YlGn')
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_colorbar_False_suptitle.png
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_colorbar_False_suptitle.svg
     :alt: Example calendar heatmap with colorbar set to False and suptitle set
 
 .. code-block:: python
 
     calplot.calplot(events, linewidth=0, cmap='YlGn')
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_linewidth_zero.png
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_linewidth_zero.svg
     :alt: Example calendar heatmap with linewidth set to 0
 
 
