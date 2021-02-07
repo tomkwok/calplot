@@ -8,7 +8,7 @@ Plot `Pandas <http://pandas.pydata.org/>`_ time series data sampled by day in
 a heatmap per calendar year, similar to GitHub's contributions plot, using
 `matplotlib <http://matplotlib.org/>`_.
 
-Package `calplot <https://pypi.org/project/calplot/>`_ is a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ with the addition of arguments :code:`colorbar`, :code:`dropzero`, :code:`figsize`, :code:`suptitle` and :code:`yearcolor` for easier customization of plots.
+Package `calplot <https://pypi.org/project/calplot/>`_ is a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ with the addition of arguments :code:`colorbar`, :code:`dropzero`, :code:`figsize`, :code:`suptitle`, :code:`yearcolor` and others for easier customization of plots.
 
 Usage
 -----
@@ -58,6 +58,7 @@ API documentation
 -----------------
 
 .. module:: calplot
+.. autofunction:: yearplot
 .. autofunction:: calplot
 
 
