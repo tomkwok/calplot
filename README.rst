@@ -10,14 +10,16 @@ a heatmap per calendar year, similar to GitHub's contributions plot, using
 Installation
 ------------
 
-To install the latest release via PyPI using pip::
+To install the latest release via PyPI using :code:`pip`::
 
     pip install calplot
 
 Usage
 -----
 
-See the `documentation <https://calplot.readthedocs.io/en/latest/>`_.
+For detailed usage of this library, refer to the `documentation <https://calplot.readthedocs.io/en/latest/>`_.
+
+The following examples are run in a `Jupyter notebook <https://jupyter.org/>`_.
 
 .. code-block:: python
 
