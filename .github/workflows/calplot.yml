@@ -1,0 +1,18 @@
+name: calplot
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.7', '3.8', '3.9']
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - run: |
+        pip install -r requirements.txt
+        python -c "import numpy as np; import pandas as pd; import calplot; calplot.calplot(pd.Series(np.random.randn(365), index=pd.date_range('2021', periods=365)))"

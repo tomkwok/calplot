@@ -1,6 +1,9 @@
 Calendar heatmaps from Pandas time series data
 ==============================================
 
+.. image:: https://github.com/tomkwok/calplot/workflows/calplot/badge.svg
+    :alt: Build status of this repository
+
 Calplot creates heatmaps from Pandas time series data.
 
 Plot `Pandas <http://pandas.pydata.org/>`_ time series data sampled by day in
@@ -87,6 +90,7 @@ Package `calplot <https://pypi.org/project/calplot/>`_ is a fork of `calmap <htt
 
 Todo
 
+- Clean up examples in docstrings in function definitions in source file.
 - Adding argument :code:`startday` for function :code:`calplot` and :code:`yearplot` to specify the index representing the `day of week <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DatetimeIndex.dayofweek.html>`_ of the first day in each week in the generated plot. Defaults to `0`, which represents Monday. (Implementation of this require non-trivial change to existing code that is inherited from calmap or taken from other projects, including code for pivoting of by_days DataFrame, and for calculation of polygon coordinates for month borders, in addition to new code to handle the ordering of items in :code:`daylabels` list.)
 
 Since version 0.1.6 (Dec 2020):
@@ -101,7 +105,7 @@ Since version 0.1.5 (Dec 2020):
 
 Since version 0.1.3 (Aug 2020):
 
-- Removed legacy code for compatibility to fix a FutureWarning in :code:`yearplot`. Note that :code:`pandas>=1.1` is now required to install the package.
+- Removed legacy code for compatibility to fix a FutureWarning in :code:`yearplot`. Note that :code:`pandas>=1` is now required to install the package.
 
 Since version 0.1.2 (Jan 2020):
 
