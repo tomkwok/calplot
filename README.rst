@@ -1,8 +1,14 @@
 Calendar heatmaps from Pandas time series data
 ==============================================
 
-.. image:: https://github.com/tomkwok/calplot/workflows/calplot/badge.svg
-    :alt: Build status of this repository
+|build|  |lgtm|
+
+.. |build| image:: https://github.com/tomkwok/calplot/workflows/calplot/badge.svg
+    :alt: Build status
+
+.. |lgtm| image:: https://img.shields.io/lgtm/grade/python/g/tomkwok/calplot.svg?logo=lgtm&logoWidth=18
+    :alt: Code quality
+    :target: https://lgtm.com/projects/g/tomkwok/calplot/context:python
 
 Calplot creates heatmaps from Pandas time series data.
 

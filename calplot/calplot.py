@@ -13,7 +13,6 @@ from matplotlib.patches import Polygon
 from dateutil.relativedelta import relativedelta
 import numpy as np
 import pandas as pd
-from distutils.version import StrictVersion
 
 def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
              fillcolor='whitesmoke', linewidth=1, linecolor=None,
