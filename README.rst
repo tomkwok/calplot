@@ -1,14 +1,26 @@
 Calendar heatmaps from Pandas time series data
 ==============================================
 
-|build|  |lgtm|
+|build| |lgtm| |license| |pypi| |downloads|
 
 .. |build| image:: https://github.com/tomkwok/calplot/workflows/calplot/badge.svg
     :alt: Build status
 
 .. |lgtm| image:: https://img.shields.io/lgtm/grade/python/g/tomkwok/calplot.svg?logo=lgtm&logoWidth=18
     :alt: Code quality
-    :target: https://lgtm.com/projects/g/tomkwok/calplot/context:python
+    :target: https://lgtm.com/projects/g/tomkwok/calplot/latest/files/
+
+.. |license| image:: https://img.shields.io/pypi/l/calplot?color=red
+    :alt: License
+    :target: LICENSE.rst
+
+.. |pypi| image:: https://img.shields.io/pypi/v/calplot?color=blue
+    :alt: PyPI version
+    :target: https://pypi.org/project/calplot/
+
+.. |downloads| image:: https://img.shields.io/pypi/dm/calplot?color=blue
+    :alt: Downloads
+    :target: https://pypi.org/project/calplot/
 
 Calplot creates heatmaps from Pandas time series data.
 
@@ -19,7 +31,7 @@ a heatmap per calendar year, similar to GitHub's contributions plot, using
 Installation
 ------------
 
-To install the latest release via PyPI using :code:`pip`::
+To install the `latest release <https://pypi.org/project/calplot/>`_ via PyPI using :code:`pip`::
 
     pip install calplot
 
