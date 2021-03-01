@@ -1,7 +1,7 @@
 Calendar heatmaps from Pandas time series data
 ==============================================
 
-|build| |lgtm| |license| |pypi| |downloads|
+|build| |lgtm| |sonarcloud| |license| |pypi| |downloads|
 
 .. |build| image:: https://github.com/tomkwok/calplot/workflows/calplot/badge.svg
     :alt: Build status
@@ -9,6 +9,10 @@ Calendar heatmaps from Pandas time series data
 .. |lgtm| image:: https://img.shields.io/lgtm/grade/python/g/tomkwok/calplot.svg?logo=lgtm&logoWidth=18
     :alt: Code quality
     :target: https://lgtm.com/projects/g/tomkwok/calplot/latest/files/
+
+.. |sonarcloud| image:: https://sonarcloud.io/api/project_badges/measure?project=tomkwok_calplot&metric=sqale_rating
+    :alt: Maintainability rating
+    :target: https://sonarcloud.io/dashboard?id=tomkwok_calplot
 
 .. |license| image:: https://img.shields.io/pypi/l/calplot?color=red
     :alt: License
