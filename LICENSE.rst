@@ -1,4 +1,4 @@
-Copyright (c) 2020 by Tom Kwok (see AUTHORS.rst for details)
+Copyright (c) 2021 by Tom Kwok
 
 Copyright (c) 2015 by Martijn Vermaat and contributors
 

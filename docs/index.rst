@@ -8,7 +8,17 @@ Plot `Pandas <http://pandas.pydata.org/>`_ time series data sampled by day in
 a heatmap per calendar year, similar to GitHub's contributions plot, using
 `matplotlib <http://matplotlib.org/>`_.
 
-Package `calplot <https://pypi.org/project/calplot/>`_ is a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ with the addition of arguments :code:`colorbar`, :code:`dropzero`, :code:`figsize`, :code:`suptitle`, :code:`yearcolor` and others for easier customization of plots.
+Package `calplot <https://pypi.org/project/calplot/>`_ was started as a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ with the addition of new arguments for easier customization of plots. Code refactoring was carried out to increase the maintainability of this package.
+
+Installation
+------------
+
+To install the latest release via PyPI using pip::
+
+    pip install calplot
+
+The latest development version `can be found on GitHub
+<https://github.com/tomkwok/calplot>`_.
 
 Usage
 -----
@@ -38,21 +48,9 @@ figure:
 
     calplot.calplot(events, cmap='YlGn')
 
-See the :ref:`API documentation <api>` for more information and examples.
-
-
-Installation
-------------
-
-To install the latest release via PyPI using pip::
-
-    pip install calplot
-
-The latest development version `can be found on GitHub
-<https://github.com/tomkwok/calplot>`_.
-
-
 .. _api:
+
+In particular, note that :code:`calplot.calplot()` wraps :code:`calplot.yearplot()`. Keyword arguments passed to :code:`calplot.calplot()` will be passed to :code:`calplot.yearplot()` when it is called.
 
 API documentation
 -----------------

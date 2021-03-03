@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Calplot documentation build configuration file, created by
-# sphinx-quickstart on Thu Nov 26 16:51:51 2015.
+# Calplot documentation build configuration file
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -36,7 +35,7 @@ import calplot
 # to 'tight' on the savefig call.
 sys.path.insert(0, os.path.abspath('sphinxext'))
 extensions = [
-    'plot_directive',
+    'matplotlib.sphinxext.plot_directive',
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'numpydoc'
@@ -64,8 +63,10 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'calplot'
-copyright = u'2020, %s' % calplot.__author__
+copyright = u'2021, %s' % calplot.__author__
 author = calplot.__author__
+
+title = u'Calplot Documentation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -133,9 +134,10 @@ html_theme = 'alabaster'
 # documentation.
 html_theme_options = {
     'github_banner': True,
+    'github_button_type': 'star',
     'github_user': 'tomkwok',
     'github_repo': 'calplot',
-    # 'github_url': 'https://github.com/tomkwok/calplot',
+    'github_url': 'https://github.com/tomkwok/calplot',
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -245,8 +247,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'calplot.tex', u'Calplot Documentation',
-   u'Tom Kwok', 'manual'),
+  (master_doc, 'calplot.tex', title,
+   author, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -275,7 +277,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'calplot', u'Calplot Documentation',
+    (master_doc, 'calplot', title,
      [author], 1)
 ]
 
@@ -289,7 +291,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'Calplot', u'Calplot Documentation',
+  (master_doc, 'Calplot', title,
    author, 'Calplot', 'One line description of project.',
    'Miscellaneous'),
 ]

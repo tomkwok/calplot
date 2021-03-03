@@ -6,19 +6,22 @@ Plot Pandas time series data sampled by day in a heatmap per calendar year.
 
 import calendar
 import datetime
-
-from matplotlib.colors import ColorConverter, ListedColormap
-import matplotlib.pyplot as plt
-from matplotlib.patches import Polygon
 from dateutil.relativedelta import relativedelta
+
 import numpy as np
 import pandas as pd
 
-def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
-             fillcolor='whitesmoke', linewidth=1, linecolor=None,
-             daylabels=calendar.day_abbr[:], dayticks=True, dropzero=True,
-             textformat='', textfiller='', textcolor='black',
-             monthlabels=calendar.month_abbr[1:], monthlabelha='center', monthticks=True, edgecolor='gray',
+from matplotlib.colors import ColorConverter, ListedColormap
+from matplotlib.patches import Polygon
+import matplotlib.pyplot as plt
+
+def yearplot(data, year=None, how='sum',
+             vmin=None, vmax=None,
+             cmap='viridis', fillcolor='whitesmoke', linewidth=1, linecolor=None,
+             daylabels=calendar.day_abbr[:], dayticks=True, dropzero=False,
+             textformat=None, textfiller='', textcolor='black',
+             monthlabels=calendar.month_abbr[1:], monthlabeloffset=15,
+             monthticks=True, edgecolor='gray',
              ax=None, **kwargs):
     """
     Plot one year from a timeseries as a calendar heatmap.
@@ -55,8 +58,8 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
         If `True`, don't fill a color for days with a zero value.
     monthlabels : list
         Strings to use as labels for months, must be of length 12.
-    monthlabelha : string
-        Horizontal alignment for labels for months.
+    monthlabeloffset : integer
+        Day offset for labels for months to adjust horizontal alignment.
     monthticks : list or int or bool
         If `True`, label all months. If `False`, don't label months. If a
         list, only label months with these indices. If an integer, label every
@@ -80,43 +83,8 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     ax : matplotlib Axes
         Axes object with the calendar heatmap.
 
-    Examples
-    --------
-
-    By default, `yearplot` plots the first year and sums the values per day:
-
-    .. plot::
-        :context: close-figs
-
-        calplot.yearplot(events)
-
-    We can choose which year is plotted with the `year` keyword argment:
-
-    .. plot::
-        :context: close-figs
-
-        calplot.yearplot(events, year=2019)
-
-    The appearance can be changed by using another colormap. Here we also use
-    a darker fill color for days without data and remove the lines:
-
-    .. plot::
-        :context: close-figs
-
-        calplot.yearplot(events, cmap='YlGn', fillcolor='grey',
-                        linewidth=0)
-
-    The axis tick labels can look a bit crowded. We can ask to draw only every
-    nth label, or explicitely supply the label indices. The labels themselves
-    can also be customized:
-
-    .. plot::
-        :context: close-figs
-
-        calplot.yearplot(events, monthticks=3, daylabels='MTWTFSS',
-                        dayticks=[0, 2, 4, 6])
-
     """
+
     if year is None:
         year = data.index.sort_values()[0].year
 
@@ -126,8 +94,9 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     else:
         # Sample by day.
         by_day = data.resample('D').agg(how)
-        if dropzero:
-            by_day = by_day.replace({0: np.nan}).dropna()
+
+    if dropzero:
+        by_day = by_day.replace({0: np.nan}).dropna()
 
     # Min and max per day.
     if vmin is None:
@@ -195,8 +164,8 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     # Remove spines and ticks.
     for side in ('top', 'right', 'left', 'bottom'):
         ax.spines[side].set_visible(False)
-    ax.xaxis.set_tick_params(which='both', length=0)
-    ax.yaxis.set_tick_params(which='both', length=0)
+    for axis in (ax.xaxis, ax.yaxis):
+        axis.set_tick_params(which='both', length=0)
 
     # Get indices for monthlabels.
     if monthticks is True:
@@ -215,9 +184,10 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
         dayticks = range(len(daylabels))[dayticks // 2::dayticks]
 
     ax.set_xlabel('')
-    ax.set_xticks([by_day.loc[pd.Timestamp(datetime.date(year, i + 1, 15))].week
+    ax.set_xticks([by_day.loc[pd.Timestamp(
+                   datetime.date(year, i + 1, monthlabeloffset))].week
                    for i in monthticks])
-    ax.set_xticklabels([monthlabels[i] for i in monthticks], ha=monthlabelha)
+    ax.set_xticklabels([monthlabels[i] for i in monthticks])
 
     ax.set_ylabel('')
     ax.yaxis.set_ticks_position('right')
@@ -225,7 +195,8 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     ax.set_yticklabels([daylabels[i] for i in dayticks], rotation='horizontal',
                        va='center')
 
-    if textformat != '':
+    # Text in mesh grid if format is specified.
+    if textformat is not None:
         for y in range(plot_data.shape[0]):
             for x in range(plot_data.shape[1]):
                 content = ''
@@ -238,7 +209,7 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
                 ax.text(x + 0.5, y + 0.5, content, color=textcolor,
                          horizontalalignment='center', verticalalignment='center')
 
-    # month borders reference https://github.com/rougier/calendar-heatmap
+    # Month borders code credited to https://github.com/rougier/calendar-heatmap
     xticks, labels = [], []
     start = datetime.datetime(year,1,1).weekday()
     for month in range(1,13):
@@ -264,8 +235,11 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='viridis',
     return ax
 
 
-def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lightgray', yearlabel_kws=None, dropzero=True, 
-                 subplot_kws=None, gridspec_kws=None, figsize=None, fig_kws=None, colorbar=True, suptitle=None, **kwargs):
+def calplot(data, how='sum',
+            yearlabels=True, yearascending=True,
+            yearlabel_kws={}, subplot_kws={}, gridspec_kws={},
+            figsize=None, fig_kws={}, colorbar=True, suptitle=None,
+            tight_layout=True, **kwargs):
     """
     Plot a timeseries as a calendar heatmap.
 
@@ -285,13 +259,9 @@ def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lig
        Whether or not to draw the year for each subplot.
     yearascending : bool
        Sort the calendar in ascending or descending order.
-    yearcolor : bool
-       Color of text of label for years.
     yearlabel_kws : dict
        Keyword arguments passed to the matplotlib `set_ylabel` call which is
        used to draw the year for each subplot.
-    dropzero : bool
-        If `True`, don't fill a color for days with a zero value.
     subplot_kws : dict
         Keyword arguments passed to the matplotlib `add_subplot` call used to
         create each subplot.
@@ -309,21 +279,7 @@ def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lig
         Tuple where `fig` is the matplotlib Figure object `axes` is an array
         of matplotlib Axes objects with the calendar heatmaps, one per year.
 
-    Examples
-    --------
-
-    With `calplot` we can plot several years in one figure:
-
-    .. plot::
-        :context: close-figs
-
-        calplot.calplot(events)
-
     """
-    yearlabel_kws = yearlabel_kws or {}
-    subplot_kws = subplot_kws or {}
-    gridspec_kws = gridspec_kws or {}
-    fig_kws = fig_kws or {}
 
     years = np.unique(data.index.year)
     if not yearascending:
@@ -335,25 +291,22 @@ def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lig
     if figsize is None:
         figsize = (10+(colorbar*2.5), 1.7*len(years))
     
-    fig, axes = plt.subplots(nrows=len(years), ncols=1, squeeze=False, figsize=figsize, 
+    fig, axes = plt.subplots(nrows=len(years), ncols=1, squeeze=False,
+                             figsize=figsize,
                              subplot_kw=subplot_kws,
                              gridspec_kw=gridspec_kws, **fig_kws)
     axes = axes.T[0]
 
     # We explicitely resample by day only once. This is an optimization.
-    if how is None:
-        by_day = data
-    else:
-        by_day = data.resample('D').agg(how)
-        if dropzero:
-            by_day = by_day.replace({0: np.nan}).dropna()
+    by_day = data
+    if how is not None:
+        by_day = by_day.resample('D').agg(how)
 
-    
     ylabel_kws = dict(
         fontsize=30,
-        color=yearcolor,
+        color='gray',
+        fontname='Helvetica',
         fontweight='bold',
-        fontname='Arial',
         ha='center')
     ylabel_kws.update(yearlabel_kws)
 
@@ -371,18 +324,19 @@ def calplot(data, how='sum', yearlabels=True, yearascending=True, yearcolor='lig
     for ax in axes:
         ax.set_xlim(0, max_weeks)
 
-    # Make the axes look good.
-    plt.tight_layout()
+    if tight_layout:
+        plt.tight_layout()
     
     if colorbar:
         if len(years) == 1:
-            fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist(), orientation='vertical')
+            fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist(),
+                         orientation='vertical')
         else:
             fig.subplots_adjust(right=0.8)
-            fig.colorbar(axes[0].get_children()[1], cax=fig.add_axes([0.85, 0.025, 0.02, 0.95]), orientation='vertical')
+            cax = fig.add_axes([0.85, 0.025, 0.02, 0.95])
+            fig.colorbar(axes[0].get_children()[1], cax=cax, orientation='vertical')
 
-    if suptitle:
-        plt.suptitle(suptitle)
+    plt.suptitle(suptitle)
     
     return fig, axes
 
