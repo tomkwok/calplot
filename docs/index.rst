@@ -46,7 +46,7 @@ figure:
 .. plot::
     :context: close-figs
 
-    calplot.calplot(events, cmap='YlGn')
+    calplot.calplot(events, cmap='YlGn', colorbar=False)
 
 .. _api:
 

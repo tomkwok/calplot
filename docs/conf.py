@@ -43,9 +43,10 @@ extensions = [
 
 # Configuration for plot_directive.
 plot_include_source = True
-plot_formats = [("png", 72)]
+plot_formats = [('svg', 72)]
 plot_html_show_formats = False
 plot_html_show_source_link = False
+plot_rcparams = {'savefig.bbox': 'tight'}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['.templates']

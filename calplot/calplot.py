@@ -17,11 +17,13 @@ import matplotlib.pyplot as plt
 
 def yearplot(data, year=None, how='sum',
              vmin=None, vmax=None,
-             cmap='viridis', fillcolor='whitesmoke', linewidth=1, linecolor=None,
-             daylabels=calendar.day_abbr[:], dayticks=True, dropzero=False,
+             cmap='viridis', fillcolor='whitesmoke',
+             linewidth=1, linecolor=None, edgecolor='gray',
+             daylabels=calendar.day_abbr[:], dayticks=True,
+             dropzero=False,
              textformat=None, textfiller='', textcolor='black',
              monthlabels=calendar.month_abbr[1:], monthlabeloffset=15,
-             monthticks=True, edgecolor='gray',
+             monthticks=True,
              ax=None, **kwargs):
     """
     Plot one year from a timeseries as a calendar heatmap.
@@ -172,16 +174,12 @@ def yearplot(data, year=None, how='sum',
         monthticks = range(len(monthlabels))
     elif monthticks is False:
         monthticks = []
-    elif isinstance(monthticks, int):
-        monthticks = range(len(monthlabels))[monthticks // 2::monthticks]
 
     # Get indices for daylabels.
     if dayticks is True:
         dayticks = range(len(daylabels))
     elif dayticks is False:
         dayticks = []
-    elif isinstance(dayticks, int):
-        dayticks = range(len(daylabels))[dayticks // 2::dayticks]
 
     ax.set_xlabel('')
     ax.set_xticks([by_day.loc[pd.Timestamp(
@@ -207,16 +205,16 @@ def yearplot(data, year=None, how='sum',
                 else:
                     content = textformat.format(masked)
                 ax.text(x + 0.5, y + 0.5, content, color=textcolor,
-                         horizontalalignment='center', verticalalignment='center')
+                         ha='center', va='center')
 
     # Month borders code credited to https://github.com/rougier/calendar-heatmap
     xticks, labels = [], []
-    start = datetime.datetime(year,1,1).weekday()
-    for month in range(1,13):
+    start = datetime.datetime(year, 1, 1).weekday()
+    for month in range(1, 13):
         first = datetime.datetime(year, month, 1)
         last = first + relativedelta(months=1, days=-1)
-        y0 = 7-first.weekday()
-        y1 = 7-last.weekday()
+        y0 = 7 - first.weekday()
+        y1 = 7 - last.weekday()
         x0 = (int(first.strftime('%j'))+start-1)//7
         x1 = (int(last.strftime('%j'))+start-1)//7
         P = [(x0, y0),
@@ -227,7 +225,7 @@ def yearplot(data, year=None, how='sum',
              (x1, y1-1),
              (x1, 0),
              (x0, 0) ]
-        xticks.append(x0 +(x1-x0+1)/2)
+        xticks.append(x0 + (x1-x0+1)/2)
         poly = Polygon(P, edgecolor=edgecolor, facecolor='None',
                        linewidth=linewidth, zorder=20, clip_on=False)
         ax.add_artist(poly)
@@ -238,7 +236,7 @@ def yearplot(data, year=None, how='sum',
 def calplot(data, how='sum',
             yearlabels=True, yearascending=True,
             yearlabel_kws={}, subplot_kws={}, gridspec_kws={},
-            figsize=None, fig_kws={}, colorbar=True, suptitle=None,
+            figsize=None, fig_kws={}, colorbar=None, suptitle=None,
             tight_layout=True, **kwargs):
     """
     Plot a timeseries as a calendar heatmap.
@@ -285,9 +283,9 @@ def calplot(data, how='sum',
     if not yearascending:
         years = years[::-1]
 
-    if colorbar and data.nunique() <= 1:
-        colorbar = False
-    
+    if colorbar is None and data.nunique() > 1:
+        colorbar = True
+
     if figsize is None:
         figsize = (10+(colorbar*2.5), 1.7*len(years))
     
@@ -326,7 +324,7 @@ def calplot(data, how='sum',
 
     if tight_layout:
         plt.tight_layout()
-    
+
     if colorbar:
         if len(years) == 1:
             fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist(),
@@ -337,6 +335,6 @@ def calplot(data, how='sum',
             fig.colorbar(axes[0].get_children()[1], cax=cax, orientation='vertical')
 
     plt.suptitle(suptitle)
-    
+
     return fig, axes
 
