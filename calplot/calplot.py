@@ -325,7 +325,11 @@ def calplot(data, how='sum',
     if tight_layout:
         plt.tight_layout()
 
+    suptitle_kws = dict({'y': 1})
+
     if colorbar:
+        suptitle_kws.update({'x': 0.425, 'y': 1.03})
+
         if len(years) == 1:
             fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist(),
                          orientation='vertical')
@@ -334,7 +338,7 @@ def calplot(data, how='sum',
             cax = fig.add_axes([0.85, 0.025, 0.02, 0.95])
             fig.colorbar(axes[0].get_children()[1], cax=cax, orientation='vertical')
 
-    plt.suptitle(suptitle)
+    plt.suptitle(suptitle, **suptitle_kws)
 
     return fig, axes
 

@@ -96,17 +96,17 @@ The following examples are run in a `Jupyter notebook <https://jupyter.org/>`_.
 
 .. code-block:: python
 
-    calplot.calplot(events, dropzero=False, cmap='YlGn')
+    calplot.calplot(events, colorbar=False, cmap='YlGn')
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_dropzero_False.svg
-    :alt: Example calendar heatmap with dropzero set to False
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_colorbar_False.svg
+    :alt: Example calendar heatmap with colorbar set to False
 
 .. code-block:: python
 
-    calplot.calplot(events, colorbar=False, suptitle='Random data from standard normal distribution', cmap='YlGn')
+    calplot.calplot(events, suptitle='Random data from standard normal distribution', cmap='YlGn')
 
-.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_colorbar_False_suptitle.svg
-    :alt: Example calendar heatmap with colorbar set to False and suptitle set
+.. image:: https://raw.githubusercontent.com/tomkwok/calplot/master/examples/calplot_suptitle.svg
+    :alt: Example calendar heatmap with suptitle set
 
 .. code-block:: python
 
