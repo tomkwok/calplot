@@ -287,8 +287,8 @@ def calplot(data, how='sum',
     if not yearascending:
         years = years[::-1]
 
-    if colorbar is None and data.nunique() > 1:
-        colorbar = True
+    if colorbar is None:
+        colorbar = data.nunique() > 1
 
     if figsize is None:
         figsize = (10+(colorbar*2.5), 1.7*len(years))
