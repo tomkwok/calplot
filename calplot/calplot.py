@@ -20,7 +20,7 @@ def yearplot(data, year=None, how='sum',
              cmap='viridis', fillcolor='whitesmoke',
              linewidth=1, linecolor=None, edgecolor='gray',
              daylabels=calendar.day_abbr[:], dayticks=True,
-             dropzero=False,
+             dropzero=None,
              textformat=None, textfiller='', textcolor='black',
              monthlabels=calendar.month_abbr[1:], monthlabeloffset=15,
              monthticks=True,
@@ -96,6 +96,10 @@ def yearplot(data, year=None, how='sum',
     else:
         # Sample by day.
         by_day = data.resample('D').agg(how)
+
+    # Default to dropping zero values for a series with over 50% of rows being zero.
+    if by_day[by_day == 0].count() > 0.5 * by_day.count():
+        dropzero = True
 
     if dropzero:
         by_day = by_day.replace({0: np.nan}).dropna()

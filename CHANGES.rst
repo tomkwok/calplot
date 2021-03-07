@@ -12,6 +12,7 @@ Since version 0.1.7 (Mar 3, 2021):
 - Added argument :code:`tight_layout` for function :code:`calplot` to specify whether to use tight layout for the figure. Defaults to :code:`True`.
 - Added argument :code:`monthlabeloffset` for function :code:`yearplot` to specify day offset for month labels to adjust the horizontal alignment of labels. Defaults to :code:`15`.
 - Changed argument :code:`colorbar` default to :code:`None`.
+- Changed argument :code:`dropzero` default to :code:`None`.
 
 Since version 0.1.6 (Dec 24, 2020):
 
