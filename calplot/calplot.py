@@ -239,8 +239,9 @@ def yearplot(data, year=None, how='sum',
 
 def calplot(data, how='sum',
             yearlabels=True, yearascending=True,
-            yearlabel_kws={}, subplot_kws={}, gridspec_kws={},
-            figsize=None, fig_kws={}, colorbar=None, suptitle=None,
+            yearlabel_kws=dict(), subplot_kws=dict(), gridspec_kws=dict(),
+            figsize=None, fig_kws=dict(), colorbar=None,
+            suptitle=None, suptitle_kws=dict(),
             tight_layout=True, **kwargs):
     """
     Plot a timeseries as a calendar heatmap.
@@ -258,20 +259,21 @@ def calplot(data, how='sum',
     suptitle : string
         Title for the plot.
     yearlabels : bool
-       Whether or not to draw the year for each subplot.
+       Whether or not to draw the year label for each subplot.
     yearascending : bool
        Sort the calendar in ascending or descending order.
     yearlabel_kws : dict
        Keyword arguments passed to the matplotlib `set_ylabel` call which is
        used to draw the year for each subplot.
     subplot_kws : dict
-        Keyword arguments passed to the matplotlib `add_subplot` call used to
-        create each subplot.
+        Keyword arguments passed to the matplotlib `subplots` call.
     gridspec_kws : dict
         Keyword arguments passed to the matplotlib `GridSpec` constructor used
         to create the grid the subplots are placed on.
     fig_kws : dict
-        Keyword arguments passed to the matplotlib `figure` call.
+        Keyword arguments passed to the matplotlib `subplots` call.
+    suptitle_kws : dict
+        Keyword arguments passed to the matplotlib `suptitle` call.
     kwargs : other keyword arguments
         All other keyword arguments are passed to `yearplot`.
 
@@ -326,13 +328,15 @@ def calplot(data, how='sum',
     for ax in axes:
         ax.set_xlim(0, max_weeks)
 
+    stitle_kws = dict()
+
     if tight_layout:
         plt.tight_layout()
-
-    suptitle_kws = dict({'y': 1})
+        stitle_kws.update({'y': 1})
 
     if colorbar:
-        suptitle_kws.update({'x': 0.425, 'y': 1.03})
+        if tight_layout:
+            stitle_kws.update({'x': 0.425, 'y': 1.03})
 
         if len(years) == 1:
             fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist(),
@@ -342,7 +346,8 @@ def calplot(data, how='sum',
             cax = fig.add_axes([0.85, 0.025, 0.02, 0.95])
             fig.colorbar(axes[0].get_children()[1], cax=cax, orientation='vertical')
 
-    plt.suptitle(suptitle, **suptitle_kws)
+    stitle_kws.update(suptitle_kws)
+    plt.suptitle(suptitle, **stitle_kws)
 
     return fig, axes
 
