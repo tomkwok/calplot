@@ -212,7 +212,7 @@ def yearplot(data, year=None, how='sum',
                          ha='center', va='center')
 
     # Month borders code credited to https://github.com/rougier/calendar-heatmap
-    xticks, labels = [], []
+    xticks = []
     start = datetime.datetime(year, 1, 1).weekday()
     for month in range(1, 13):
         first = datetime.datetime(year, month, 1)
@@ -239,9 +239,9 @@ def yearplot(data, year=None, how='sum',
 
 def calplot(data, how='sum',
             yearlabels=True, yearascending=True,
-            yearlabel_kws=dict(), subplot_kws=dict(), gridspec_kws=dict(),
-            figsize=None, fig_kws=dict(), colorbar=None,
-            suptitle=None, suptitle_kws=dict(),
+            yearlabel_kws=None, subplot_kws=None, gridspec_kws=None,
+            figsize=None, fig_kws=None, colorbar=None,
+            suptitle=None, suptitle_kws=None,
             tight_layout=True, **kwargs):
     """
     Plot a timeseries as a calendar heatmap.
@@ -285,6 +285,17 @@ def calplot(data, how='sum',
 
     """
 
+    if yearlabel_kws is None:
+        yearlabel_kws = dict()
+    if subplot_kws is None:
+        subplot_kws = dict()
+    if gridspec_kws is None:
+        gridspec_kws = dict()
+    if fig_kws is None:
+        fig_kws = dict()
+    if suptitle_kws is None:
+        suptitle_kws = dict()
+
     years = np.unique(data.index.year)
     if not yearascending:
         years = years[::-1]
@@ -294,7 +305,7 @@ def calplot(data, how='sum',
 
     if figsize is None:
         figsize = (10+(colorbar*2.5), 1.7*len(years))
-    
+
     fig, axes = plt.subplots(nrows=len(years), ncols=1, squeeze=False,
                              figsize=figsize,
                              subplot_kw=subplot_kws,
@@ -350,4 +361,3 @@ def calplot(data, how='sum',
     plt.suptitle(suptitle, **stitle_kws)
 
     return fig, axes
-
