@@ -98,7 +98,7 @@ def yearplot(data, year=None, how='sum',
         by_day = data.resample('D').agg(how)
 
     # Default to dropping zero values for a series with over 50% of rows being zero.
-    if by_day[by_day == 0].count() > 0.5 * by_day.count():
+    if not (dropzero is False) and (by_day[by_day == 0].count() > 0.5 * by_day.count()):
         dropzero = True
 
     if dropzero:
