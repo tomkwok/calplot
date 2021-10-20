@@ -172,15 +172,20 @@ def yearplot(data, year=None, how='sum',
     def get_position_data(x, y) -> tuple[datetime.date, Any]:
         x0, x1 = ax.get_xlim()
         y0, y1 = ax.get_ylim()
-        col = int(np.floor((x - x0) / float(x1 - x0) * plot_data.shape[1]))
-        row = int(np.floor((y - y0) / float(y1 - y0) * plot_data.shape[0]))
-        pos_date = by_day.index[(col * 7) + (6 - row) - by_day.index[0].dayofweek].date()
+        col = int(np.floor((x - x0) / float(x1 - x0) * fill_data.shape[1]))
+        row = int(np.floor((y - y0) / float(y1 - y0) * fill_data.shape[0]))
+        date_index = (col * 7) + (6 - row) - by_day.index[0].dayofweek
+        if date_index < 0 or date_index >= len(by_day.index):
+            return (None, None)
+        pos_date = by_day.index[date_index].date()
         pos_val = plot_data[row, col]
         return (pos_date, pos_val)
 
     if on_format_coord:
         def wrapped_on_format_coord(x, y) -> str:
             (hover_date, hover_val) = get_position_data(x, y)
+            if not hover_date and not hover_val:
+                return ""
             return on_format_coord(hover_date, hover_val)
 
         ax.format_coord = wrapped_on_format_coord
