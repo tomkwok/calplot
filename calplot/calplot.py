@@ -14,6 +14,7 @@ import pandas as pd
 from matplotlib.colors import ColorConverter, ListedColormap
 from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
+from typing import Any, Optional
 
 def yearplot(data, year=None, how='sum',
              vmin=None, vmax=None,
@@ -24,7 +25,9 @@ def yearplot(data, year=None, how='sum',
              textformat=None, textfiller='', textcolor='black',
              monthlabels=calendar.month_abbr[1:], monthlabeloffset=15,
              monthticks=True,
-             ax=None, **kwargs):
+             ax=None,
+             on_format_coord=None,
+             on_click=None, **kwargs):
     """
     Plot one year from a timeseries as a calendar heatmap.
 
@@ -77,6 +80,10 @@ def yearplot(data, year=None, how='sum',
     ax : matplotlib Axes
         Axes in which to draw the plot, otherwise use the currently-active
         Axes.
+    on_format_coord : (hover_date: date, hover_val: Any) -> str
+        Function to format coordinates shown in the bottom right corner on hover.
+    on_click : (click_date: date, click_val: Any) -> None
+        Function that gets executed when a user clicks on a cell.
     kwargs : other keyword arguments
         All other keyword arguments are passed to matplotlib `ax.pcolormesh`.
 
@@ -161,6 +168,31 @@ def yearplot(data, year=None, how='sum',
     kwargs['edgecolors'] = linecolor
     ax.pcolormesh(plot_data, vmin=vmin, vmax=vmax, cmap=cmap, **kwargs)
 
+    def get_position_data(x, y) -> tuple[datetime.date, Any]:
+        x0, x1 = ax.get_xlim()
+        y0, y1 = ax.get_ylim()
+        col = int(np.floor((x - x0) / float(x1 - x0) * plot_data.shape[1]))
+        row = int(np.floor((y - y0) / float(y1 - y0) * plot_data.shape[0]))
+        pos_date = by_day.index[(col * 7) + (6 - row) - by_day.index[0].dayofweek].date()
+        pos_val = plot_data[row, col]
+        return (pos_date, pos_val)
+
+    if on_format_coord:
+        def wrapped_on_format_coord(x, y) -> str:
+            (hover_date, hover_val) = get_position_data(x, y)
+            return on_format_coord(hover_date, hover_val)
+
+        ax.format_coord = wrapped_on_format_coord
+
+    if on_click:
+        def wrapped_on_click(event) -> None:
+            if not event.xdata or not event.ydata:
+                return
+            (click_date, click_val) = get_position_data(event.xdata, event.ydata)
+            on_click(click_date, click_val)
+
+        ax.get_figure().canvas.mpl_connect(s="button_press_event", func=wrapped_on_click)
+
     # Limit heatmap to our data.
     ax.set(xlim=(0, plot_data.shape[1]), ylim=(0, plot_data.shape[0]))
 
@@ -242,7 +274,9 @@ def calplot(data, how='sum',
             yearlabel_kws=None, subplot_kws=None, gridspec_kws=None,
             figsize=None, fig_kws=None, colorbar=None,
             suptitle=None, suptitle_kws=None,
-            tight_layout=True, **kwargs):
+            tight_layout=True,
+            on_format_coord=None,
+            on_click=None, **kwargs):
     """
     Plot a timeseries as a calendar heatmap.
 
@@ -274,6 +308,10 @@ def calplot(data, how='sum',
         Keyword arguments passed to the matplotlib `subplots` call.
     suptitle_kws : dict
         Keyword arguments passed to the matplotlib `suptitle` call.
+    on_format_coord : (hover_date: date, hover_val: Any) -> str
+        Function to format coordinates shown in the bottom right corner on hover.
+    on_click : (click_date: date, click_val: Any) -> None
+        Function that gets executed when a user clicks on a cell.
     kwargs : other keyword arguments
         All other keyword arguments are passed to `yearplot`.
 
@@ -328,7 +366,15 @@ def calplot(data, how='sum',
     max_weeks = 0
 
     for year, ax in zip(years, axes):
-        yearplot(by_day, year=year, how=None, ax=ax, **kwargs)
+        yearplot(
+            by_day,
+            year=year,
+            how=None,
+            ax=ax,
+            on_format_coord=on_format_coord,
+            on_click=on_click,
+            **kwargs
+        )
         max_weeks = max(max_weeks, ax.get_xlim()[1])
 
         if yearlabels:
