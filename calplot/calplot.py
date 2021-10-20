@@ -6,15 +6,15 @@ Plot Pandas time series data sampled by day in a heatmap per calendar year.
 
 import calendar
 import datetime
-from dateutil.relativedelta import relativedelta
+from typing import Any, Optional
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
+from dateutil.relativedelta import relativedelta
 from matplotlib.colors import ColorConverter, ListedColormap
 from matplotlib.patches import Polygon
-import matplotlib.pyplot as plt
-from typing import Any, Optional
+
 
 def yearplot(data, year=None, how='sum',
              vmin=None, vmax=None,
@@ -168,6 +168,7 @@ def yearplot(data, year=None, how='sum',
     kwargs['edgecolors'] = linecolor
     ax.pcolormesh(plot_data, vmin=vmin, vmax=vmax, cmap=cmap, **kwargs)
 
+    # Helper function for mapping x/y coordinates on the colormesh back to dates and values.
     def get_position_data(x, y) -> tuple[datetime.date, Any]:
         x0, x1 = ax.get_xlim()
         y0, y1 = ax.get_ylim()
