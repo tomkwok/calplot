@@ -195,6 +195,8 @@ def yearplot(data, year=None, how='sum',
     if on_click:
         def wrapped_on_click(event) -> None:
             # Check if clicked ax is associated with this handler.
+            if not event.inaxes:
+                return
             if ax_row != event.inaxes.get_subplotspec().num1 or ax_col != event.inaxes.get_subplotspec().num2:
                 return
             if not event.xdata or not event.ydata:
