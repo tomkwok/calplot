@@ -6,7 +6,7 @@ Plot Pandas time series data sampled by day in a heatmap per calendar year.
 
 import calendar
 import datetime
-from typing import Any, Optional
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
