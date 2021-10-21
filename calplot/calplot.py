@@ -190,8 +190,13 @@ def yearplot(data, year=None, how='sum',
 
         ax.format_coord = wrapped_on_format_coord
 
+    ax_row = ax.get_subplotspec().num1
+    ax_col = ax.get_subplotspec().num2
     if on_click:
         def wrapped_on_click(event) -> None:
+            # Check if clicked ax is associated with this handler.
+            if ax_row != event.inaxes.get_subplotspec().num1 or ax_col != event.inaxes.get_subplotspec().num2:
+                return
             if not event.xdata or not event.ydata:
                 return
             (click_date, click_val) = get_position_data(event.xdata, event.ydata)
