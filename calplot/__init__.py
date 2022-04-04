@@ -1,5 +1,5 @@
-__version_info__ = ('0', '1', '7', '3')
-__date__ = '15 Mar 2021'
+__version_info__ = ('0', '1', '7', '4')
+__date__ = '4 Apr 2022'
 
 __version__ = '.'.join(__version_info__)
 __author__ = 'Tom Kwok'
