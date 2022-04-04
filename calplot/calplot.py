@@ -125,7 +125,11 @@ def yearplot(data, year=None, how='sum',
             linecolor = 'white'
 
     # Filter on year.
-    by_day = by_day[str(year)]
+    try:
+      # could be empty due to `dropzero`
+      by_day = by_day[str(year)]
+    except KeyError:
+      pass
 
     # Add missing days.
     by_day = by_day.reindex(
