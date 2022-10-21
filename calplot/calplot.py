@@ -150,11 +150,11 @@ def yearplot(data, year=None, how='sum',
         = by_day.week.max() + 1
 
     # Pivot data on day and week and mask NaN days.
-    plot_data = by_day.pivot('day', 'week', 'data').values[::-1]
+    plot_data = by_day.pivot(index='day', columns='week', values='data').values[::-1]
     plot_data = np.ma.masked_where(np.isnan(plot_data), plot_data)
 
     # Do the same for all days of the year, not just those we have data for.
-    fill_data = by_day.pivot('day', 'week', 'fill').values[::-1]
+    fill_data = by_day.pivot(index='day', columns='week', values='fill').values[::-1]
     fill_data = np.ma.masked_where(np.isnan(fill_data), fill_data)
 
     # Draw heatmap for all days of the year with fill color.
