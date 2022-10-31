@@ -360,6 +360,8 @@ def calplot(data, how='sum',
             fig.subplots_adjust(right=0.8)
             cax = fig.add_axes([0.85, 0.025, 0.02, 0.95])
             fig.colorbar(axes[0].get_children()[1], cax=cax, orientation='vertical')
+            if tight_layout:
+                plt.tight_layout(rect=[0, 0, 0.8, 1])
 
     stitle_kws.update(suptitle_kws)
     plt.suptitle(suptitle, **stitle_kws)
