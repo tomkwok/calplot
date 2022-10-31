@@ -1,14 +1,10 @@
 Calendar heatmaps from Pandas time series data
 ==============================================
 
-|build| |lgtm| |sonar| |license| |pypi| |downloads|
+|build| |sonar| |license| |pypi| |downloads|
 
 .. |build| image:: https://github.com/tomkwok/calplot/workflows/calplot/badge.svg
     :alt: Build status
-
-.. |lgtm| image:: https://img.shields.io/lgtm/grade/python/g/tomkwok/calplot.svg?logo=lgtm&logoWidth=18
-    :alt: Code quality
-    :target: https://lgtm.com/projects/g/tomkwok/calplot/latest/files/
 
 .. |sonar| image:: https://img.shields.io/sonar/tech_debt/tomkwok_calplot?logo=sonarsource&server=https%3A%2F%2Fsonarcloud.io
     :alt: Maintainability rating
@@ -43,7 +39,7 @@ To install the `latest release <https://pypi.org/project/calplot/>`_ via PyPI us
 Changelog
 ---------
 
-Package `calplot <https://pypi.org/project/calplot/>`_ was started as a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ with the addition of new arguments for easier customization.
+Package `calplot <https://pypi.org/project/calplot/>`_ was created as a fork of `calmap <https://github.com/martijnvermaat/calmap>`_ with the addition of new arguments for easier customization.
 
 See `CHANGES.rst <CHANGES.rst>`_ for changelog.
 
