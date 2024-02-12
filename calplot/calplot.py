@@ -244,8 +244,8 @@ def yearplot(data, year=None, how='sum',
 def calplot(data, how='sum',
             yearlabels=True, yearascending=True,
             yearlabel_kws=None, subplot_kws=None, gridspec_kws=None,
-            figsize=None, fig_kws=None, colorbar=None,
-            suptitle=None, suptitle_kws=None,
+            figsize=None, fig_kws=None, colorbar=None, colorbar_label=None,
+            suptitle=None, suptitle_kws=None,  
             tight_layout=True, **kwargs):
     """
     Plot a timeseries as a calendar heatmap.
@@ -355,11 +355,11 @@ def calplot(data, how='sum',
 
         if len(years) == 1:
             fig.colorbar(axes[0].get_children()[1], ax=axes.ravel().tolist(),
-                         orientation='vertical')
+                         orientation='vertical', label=colorbar_label)
         else:
             fig.subplots_adjust(right=0.8)
             cax = fig.add_axes([0.85, 0.025, 0.02, 0.95])
-            fig.colorbar(axes[0].get_children()[1], cax=cax, orientation='vertical')
+            fig.colorbar(axes[0].get_children()[1], cax=cax, orientation='vertical', label=colorbar_label)
 
     stitle_kws.update(suptitle_kws)
     plt.suptitle(suptitle, **stitle_kws)
